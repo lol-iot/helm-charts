@@ -1,2 +1,2 @@
-# -- Whether to install the experimental Gateway API CRDs.
+# -- Whether to install the experimental Gateway API CRDs or not.
 experimental: false

@@ -2,8 +2,21 @@ apiVersion: v1
 entries:
   gateway-api:
   - apiVersion: v2
+    appVersion: v1.3.0
+    created: "2025-06-13T15:08:43.309747201+09:00"
+    description: Kubernetes Gateway API
+    digest: fe30ba6f17b67f00de1fda2facbcc46e77e2204e80f3523092a9007561ce8865
+    home: https://gateway-api.sigs.k8s.io/
+    name: gateway-api
+    sources:
+    - https://github.com/kubernetes-sigs/gateway-api
+    type: application
+    urls:
+    - charts/gateway-api-1.3.0.tgz
+    version: 1.3.0
+  - apiVersion: v2
     appVersion: v1.2.0
-    created: "2025-06-13T13:57:13.24737738+09:00"
+    created: "2025-06-13T15:08:43.303027803+09:00"
     description: Kubernetes Gateway API
     digest: 117837038436b2f6248bc47467be006f267d4175fc6469f52b30d86fbe043e78
     name: gateway-api
@@ -13,7 +26,7 @@ entries:
     version: 1.2.0
   - apiVersion: v2
     appVersion: v1.1.0
-    created: "2025-06-13T13:57:13.242002495+09:00"
+    created: "2025-06-13T15:08:43.297087357+09:00"
     description: Kubernetes Gateway API
     digest: 0719e4438c2c2f1ba51fe3e0c642e4fa578f485f0375215ed627ce7bd827e675
     name: gateway-api
@@ -21,4 +34,4 @@ entries:
     urls:
     - charts/gateway-api-1.1.0.tgz
     version: 1.1.0
-generated: "2025-06-13T13:57:13.235720168+09:00"
+generated: "2025-06-13T15:08:43.289862585+09:00"
