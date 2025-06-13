@@ -1,0 +1,9 @@
+apiVersion: v2
+name: gateway-api
+description: Kubernetes Gateway API
+type: application
+version: 1.2.0
+appVersion: "v1.2.0"
+home: https://gateway-api.sigs.k8s.io/
+sources:
+  - https://github.com/kubernetes-sigs/gateway-api
