@@ -1,0 +1,5 @@
+{{- $crdPath := "files/crd/**.yaml" -}}
+{{- range $path, $_ :=  .Files.Glob  $crdPath -}}
+---
+{{ $.Files.Get $path }}
+{{- end -}}

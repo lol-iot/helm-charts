@@ -9,6 +9,7 @@ Kubernetes Gateway API
 ## Source Code
 
 * <https://github.com/kubernetes-sigs/gateway-api>
+* <https://github.com/kubernetes-sigs/gateway-api/tree/main/config/crd>
 
 ## Values
 

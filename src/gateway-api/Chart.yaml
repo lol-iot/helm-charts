@@ -7,3 +7,4 @@ appVersion: "v1.3.0"
 home: https://gateway-api.sigs.k8s.io/
 sources:
   - https://github.com/kubernetes-sigs/gateway-api
+  - https://github.com/kubernetes-sigs/gateway-api/tree/main/config/crd

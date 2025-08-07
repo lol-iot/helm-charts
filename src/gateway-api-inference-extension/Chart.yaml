@@ -1,0 +1,10 @@
+apiVersion: v2
+name: gateway-api-inference-extension
+description: Kubernetes Gateway API Inference Extension
+type: application
+version: 0.5.1
+appVersion: "v0.5.1"
+home: https://gateway-api-inference-extension.sigs.k8s.io/
+sources:
+  - https://github.com/kubernetes-sigs/gateway-api-inference-extension
+  - https://github.com/kubernetes-sigs/gateway-api-inference-extension/tree/main/config/crd
