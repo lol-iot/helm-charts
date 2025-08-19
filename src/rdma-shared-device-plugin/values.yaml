@@ -1,0 +1,83 @@
+# -- String to partially override release name.
+nameOverride: ""
+
+# -- String to fully override release name.
+fullnameOverride: ""
+
+# -- Common labels for all resources.
+commonLabels: {}
+
+# -- Image pull secrets.
+imagePullSecrets: []
+
+image:
+  # -- Image repository.
+  repository: "ghcr.io/mellanox/k8s-rdma-shared-dev-plugin"
+  # -- Image tag. If not set, the chart's appVersion will be used.
+  tag: ""
+  # -- Image pull policy.
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name: ""
+
+# -- Extra labels for pods.
+podLabels: {}
+
+# -- Pod resource requests and limits for containers.
+resources: {}
+
+# -- List of node taints to tolerate for pods.
+tolerations:
+  - key: amd.com/gpu
+    operator: Exists
+    effect: NoSchedule
+
+cdi:
+  # -- Enable CDI support.
+  # https://github.com/cncf-tags/container-device-interface
+  enabled: false
+
+# -- Plugin Configurations.
+# https://github.com/Mellanox/k8s-rdma-shared-dev-plugin?tab=readme-ov-file#rdma-shared-device-plugin-configurations
+config:
+  # -- Time interval in seconds to update the resources according to host
+  # devices in case of changes. If set to 0, the resources will not be updated.
+  # If not set, the default value is 60.
+  periodicUpdateInterval: 300
+  # -- List of device configurations.
+  configList:
+    - # -- Endpoint resource prefix. Should not contain special characters.
+      resourcePrefix: mellanox
+      # -- Endpoint resource name. Should not contain special characters, must
+      # be unique in the scope of the resource prefix.
+      resourceName: hca_a
+      # -- Maximum number of RDMA resources that can be provided by the device
+      # plugin resource.
+      rdmaHcaMax: 1000
+      # -- List of devices names to be selected, same as "ifNames" selector
+      devices:
+        - ib0
+        - ib1
+    - resourcePrefix: mellanox
+      resourceName: hca_b
+      rdmaHcaMax: 500
+      # -- Map of device selectors for filtering the devices.
+      selectors:
+        # -- (string) Target device's vendor Hex code.
+        vendors:
+          - 15b3
+        # -- (string) Target device's device Hex code.
+        deviceIDs:
+          - "1017"
+        # -- Target device driver names.
+        drivers:
+          - mlx5_core
+        # -- Target device name.
+        ifNames:
+          - ib3
+          - ib4
+        # -- Link type of the net device associated with the PCI device.
+        linkTypes:
+          - ether

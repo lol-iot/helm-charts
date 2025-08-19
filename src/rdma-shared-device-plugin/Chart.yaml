@@ -1,0 +1,10 @@
+apiVersion: v2
+name: rdma-shared-device-plugin
+description: RDMA Shared Device Plugin
+type: application
+version: 1.5.3
+appVersion: "v1.5.3"
+home: https://github.com/Mellanox/k8s-rdma-shared-dev-plugin
+sources:
+  - https://github.com/Mellanox/k8s-rdma-shared-dev-plugin
+  - https://github.com/Mellanox/k8s-rdma-shared-dev-plugin/tree/master/deployment/k8s
