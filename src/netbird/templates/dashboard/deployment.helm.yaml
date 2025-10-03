@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "netbird.dashboard.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "netbird.dashboard.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "netbird.dashboard.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "netbird.dashboard.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: dashboard
+          image: "{{ .Values.dashboard.image.repository }}:{{ .Values.dashboard.image.tag }}"
+          imagePullPolicy: {{ .Values.dashboard.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            - name: NETBIRD_MGMT_API_ENDPOINT
+              value: {{ printf "https://%s" .Values.route.serverHostname | quote }}
+            - name: USE_AUTH0
+              value: "false"
+            - name: AUTH_AUTHORITY
+              value: {{ .Values.oidc.issuer | quote }}
+            - name: AUTH_AUDIENCE
+              value: {{ .Values.oidc.clientID | quote }}
+            - name: AUTH_CLIENT_ID
+              value: {{ .Values.oidc.clientID | quote }}
+            - name: AUTH_CLIENT_SECRET
+              value: {{ .Values.oidc.clientSecret | quote }}
+            - name: AUTH_SUPPORTED_SCOPES
+              value: {{ .Values.oidc.scopes | quote }}
+            - name: AUTH_REDIRECT_URI
+              value: /peers
+            - name: AUTH_SILENT_REDIRECT_URI
+              value: /add-peers
+            - name: NETBIRD_TOKEN_SOURCE
+              value: accessToken
+          resources: {}

@@ -1,0 +1,9 @@
+apiVersion: v2
+name: netbird
+description: Connect your devices into a secure WireGuard®-based overlay network with SSO, MFA and granular access controls.
+type: application
+version: 0.59.2
+appVersion: "v0.59.2"
+home: https://netbird.io/
+sources:
+  - https://github.com/netbirdio/netbird

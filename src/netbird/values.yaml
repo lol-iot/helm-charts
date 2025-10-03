@@ -1,0 +1,107 @@
+# -- String to partially override release name.
+nameOverride: ""
+
+# -- String to fully override release name.
+fullnameOverride: ""
+
+# -- Common labels for all resources.
+commonLabels: {}
+
+# -- Image pull secrets.
+imagePullSecrets: []
+
+management:
+  image:
+    repository: docker.io/netbirdio/management
+    # -- Image tag (defaults to chart appVersion if not set).
+    tag: ""
+    pullPolicy: IfNotPresent
+
+  database:
+    engine: postgres
+    host: ""
+    port: 5432
+    user: netbird
+    password: netbird
+    database: netbird
+
+    # @schema
+    # minLength: 44
+    # maxLength: 44
+    # @schema
+    # -- Base64-encoded 32-byte key for encrypting sensitive data in the database.
+    # You can generate it using: `openssl rand -base64 32`
+    encryptionKey: ""
+
+signal:
+  image:
+    repository: docker.io/netbirdio/signal
+    # -- Image tag (defaults to chart appVersion if not set).
+    tag: ""
+    pullPolicy: IfNotPresent
+
+relay:
+  image:
+    repository: docker.io/netbirdio/relay
+    # -- Image tag (defaults to chart appVersion if not set).
+    tag: ""
+    pullPolicy: IfNotPresent
+
+  # @schema
+  # minLength: 2
+  # @schema
+  authSecret: ""
+
+dashboard:
+  image:
+    repository: docker.io/netbirdio/dashboard
+    tag: v2.19.0
+    pullPolicy: IfNotPresent
+
+oidc:
+  # @schema
+  # minLength: 2
+  # @schema
+  issuer: ""
+
+  # @schema
+  # minLength: 2
+  # @schema
+  clientID: ""
+  clientSecret: ""
+  scopes: "openid profile email"
+
+  # @schema
+  # enum: [none, hosted]
+  # @schema
+  deviceProvider: none
+  configEndpoint: "{{ .Values.oidc.issuer }}/.well-known/openid-configuration"
+
+  # -- JWKs URI. If configEndpoint is set, this value will be ignored.
+  jwksURI: ""
+
+  # -- Authorization endpoint. If configEndpoint is set, this value will be ignored.
+  authEndpoint: ""
+
+  # -- Token endpoint. If configEndpoint is set and idpManager.type is not "none", this value will be ignored.
+  tokenEndpoint: ""
+
+  # -- Device authorization endpoint. If configEndpoint is set, this value will be ignored.
+  deviceAuthEndpoint: ""
+
+  idpManager:
+    # @schema
+    # enum: [none, auth0, authentik, azure, google, jumpcloud, keycloak, okta, zitadel]
+    # @schema
+    type: none
+    extraConfig: {}
+
+route:
+  enabled: false
+
+  parentRefs:
+    - name: ""
+      namespace: ""
+
+  serverHostname: ""
+  dashboardHostname: ""

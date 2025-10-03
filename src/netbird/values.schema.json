@@ -1,0 +1,463 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "commonLabels": {
+      "additionalProperties": false,
+      "description": "Common labels for all resources.",
+      "required": [],
+      "title": "commonLabels",
+      "type": "object"
+    },
+    "dashboard": {
+      "additionalProperties": false,
+      "properties": {
+        "image": {
+          "additionalProperties": false,
+          "properties": {
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "required": [],
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "repository": {
+              "default": "docker.io/netbirdio/dashboard",
+              "required": [],
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "v2.19.0",
+              "required": [],
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "required": [
+            "repository",
+            "tag",
+            "pullPolicy"
+          ],
+          "title": "image",
+          "type": "object"
+        }
+      },
+      "required": [
+        "image"
+      ],
+      "title": "dashboard",
+      "type": "object"
+    },
+    "fullnameOverride": {
+      "default": "",
+      "description": "String to fully override release name.",
+      "required": [],
+      "title": "fullnameOverride",
+      "type": "string"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "imagePullSecrets": {
+      "description": "Image pull secrets.",
+      "items": {
+        "required": []
+      },
+      "required": [],
+      "title": "imagePullSecrets",
+      "type": "array"
+    },
+    "management": {
+      "additionalProperties": false,
+      "properties": {
+        "database": {
+          "additionalProperties": false,
+          "properties": {
+            "database": {
+              "default": "netbird",
+              "required": [],
+              "title": "database",
+              "type": "string"
+            },
+            "encryptionKey": {
+              "default": "",
+              "description": "Base64-encoded 32-byte key for encrypting sensitive data in the database.\nYou can generate it using: `openssl rand -base64 32`",
+              "maxLength": 44,
+              "minLength": 44,
+              "required": [],
+              "title": "encryptionKey"
+            },
+            "engine": {
+              "default": "postgres",
+              "required": [],
+              "title": "engine",
+              "type": "string"
+            },
+            "host": {
+              "default": "",
+              "required": [],
+              "title": "host",
+              "type": "string"
+            },
+            "password": {
+              "default": "netbird",
+              "required": [],
+              "title": "password",
+              "type": "string"
+            },
+            "port": {
+              "default": 5432,
+              "required": [],
+              "title": "port",
+              "type": "integer"
+            },
+            "user": {
+              "default": "netbird",
+              "required": [],
+              "title": "user",
+              "type": "string"
+            }
+          },
+          "required": [
+            "engine",
+            "host",
+            "port",
+            "user",
+            "password",
+            "database"
+          ],
+          "title": "database",
+          "type": "object"
+        },
+        "image": {
+          "additionalProperties": false,
+          "properties": {
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "required": [],
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "repository": {
+              "default": "docker.io/netbirdio/management",
+              "required": [],
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "",
+              "description": "Image tag (defaults to chart appVersion if not set).",
+              "required": [],
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "required": [
+            "repository",
+            "tag",
+            "pullPolicy"
+          ],
+          "title": "image",
+          "type": "object"
+        }
+      },
+      "required": [
+        "image",
+        "database"
+      ],
+      "title": "management",
+      "type": "object"
+    },
+    "nameOverride": {
+      "default": "",
+      "description": "String to partially override release name.",
+      "required": [],
+      "title": "nameOverride",
+      "type": "string"
+    },
+    "oidc": {
+      "additionalProperties": false,
+      "properties": {
+        "authEndpoint": {
+          "default": "",
+          "description": "Authorization endpoint. If configEndpoint is set, this value will be ignored.",
+          "required": [],
+          "title": "authEndpoint",
+          "type": "string"
+        },
+        "clientID": {
+          "default": "",
+          "minLength": 2,
+          "required": [],
+          "title": "clientID"
+        },
+        "clientSecret": {
+          "default": "",
+          "required": [],
+          "title": "clientSecret",
+          "type": "string"
+        },
+        "configEndpoint": {
+          "default": "{{ .Values.oidc.issuer }}/.well-known/openid-configuration",
+          "required": [],
+          "title": "configEndpoint",
+          "type": "string"
+        },
+        "deviceAuthEndpoint": {
+          "default": "",
+          "description": "Device authorization endpoint. If configEndpoint is set, this value will be ignored.",
+          "required": [],
+          "title": "deviceAuthEndpoint",
+          "type": "string"
+        },
+        "deviceProvider": {
+          "default": "none",
+          "enum": [
+            "none",
+            "hosted"
+          ],
+          "required": [],
+          "title": "deviceProvider"
+        },
+        "idpManager": {
+          "additionalProperties": false,
+          "properties": {
+            "extraConfig": {
+              "additionalProperties": false,
+              "required": [],
+              "title": "extraConfig",
+              "type": "object"
+            },
+            "type": {
+              "default": "none",
+              "enum": [
+                "none",
+                "auth0",
+                "authentik",
+                "azure",
+                "google",
+                "jumpcloud",
+                "keycloak",
+                "okta",
+                "zitadel"
+              ],
+              "required": [],
+              "title": "type"
+            }
+          },
+          "required": [
+            "extraConfig"
+          ],
+          "title": "idpManager",
+          "type": "object"
+        },
+        "issuer": {
+          "default": "",
+          "minLength": 2,
+          "required": [],
+          "title": "issuer"
+        },
+        "jwksURI": {
+          "default": "",
+          "description": "JWKs URI. If configEndpoint is set, this value will be ignored.",
+          "required": [],
+          "title": "jwksURI",
+          "type": "string"
+        },
+        "scopes": {
+          "default": "openid profile email",
+          "required": [],
+          "title": "scopes",
+          "type": "string"
+        },
+        "tokenEndpoint": {
+          "default": "",
+          "description": "Token endpoint. If configEndpoint is set and idpManager.type is not \"none\", this value will be ignored.",
+          "required": [],
+          "title": "tokenEndpoint",
+          "type": "string"
+        }
+      },
+      "required": [
+        "clientSecret",
+        "scopes",
+        "configEndpoint",
+        "jwksURI",
+        "authEndpoint",
+        "tokenEndpoint",
+        "deviceAuthEndpoint",
+        "idpManager"
+      ],
+      "title": "oidc",
+      "type": "object"
+    },
+    "relay": {
+      "additionalProperties": false,
+      "properties": {
+        "authSecret": {
+          "default": "",
+          "minLength": 2,
+          "required": [],
+          "title": "authSecret"
+        },
+        "image": {
+          "additionalProperties": false,
+          "properties": {
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "required": [],
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "repository": {
+              "default": "docker.io/netbirdio/relay",
+              "required": [],
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "",
+              "description": "Image tag (defaults to chart appVersion if not set).",
+              "required": [],
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "required": [
+            "repository",
+            "tag",
+            "pullPolicy"
+          ],
+          "title": "image",
+          "type": "object"
+        }
+      },
+      "required": [
+        "image"
+      ],
+      "title": "relay",
+      "type": "object"
+    },
+    "route": {
+      "additionalProperties": false,
+      "properties": {
+        "dashboardHostname": {
+          "default": "",
+          "required": [],
+          "title": "dashboardHostname",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "required": [],
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "parentRefs": {
+          "items": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "default": "",
+                    "required": [],
+                    "title": "name",
+                    "type": "string"
+                  },
+                  "namespace": {
+                    "default": "",
+                    "required": [],
+                    "title": "namespace",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "namespace"
+                ],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "required": [],
+          "title": "parentRefs",
+          "type": "array"
+        },
+        "serverHostname": {
+          "default": "",
+          "required": [],
+          "title": "serverHostname",
+          "type": "string"
+        }
+      },
+      "required": [
+        "enabled",
+        "parentRefs",
+        "serverHostname",
+        "dashboardHostname"
+      ],
+      "title": "route",
+      "type": "object"
+    },
+    "signal": {
+      "additionalProperties": false,
+      "properties": {
+        "image": {
+          "additionalProperties": false,
+          "properties": {
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "required": [],
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "repository": {
+              "default": "docker.io/netbirdio/signal",
+              "required": [],
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "",
+              "description": "Image tag (defaults to chart appVersion if not set).",
+              "required": [],
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "required": [
+            "repository",
+            "tag",
+            "pullPolicy"
+          ],
+          "title": "image",
+          "type": "object"
+        }
+      },
+      "required": [
+        "image"
+      ],
+      "title": "signal",
+      "type": "object"
+    }
+  },
+  "required": [
+    "nameOverride",
+    "fullnameOverride",
+    "commonLabels",
+    "imagePullSecrets",
+    "management",
+    "signal",
+    "relay",
+    "dashboard",
+    "oidc",
+    "route"
+  ],
+  "type": "object"
+}

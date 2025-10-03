@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "netbird.signal.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "netbird.signal.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "netbird.signal.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "netbird.signal.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: signal
+          image: "{{ .Values.signal.image.repository }}:{{ .Values.signal.image.tag | default .Chart.AppVersion | trimPrefix "v" }}"
+          imagePullPolicy: {{ .Values.signal.image.pullPolicy }}
+          args:
+            - --port
+            - "80"
+            - --log-level
+            - info
+            - --log-file
+            - console
+          ports:
+            - name: grpc
+              containerPort: 80
+            - name: metrics
+              containerPort: 9090
+          resources: {}

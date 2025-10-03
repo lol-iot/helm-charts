@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "netbird.relay.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "netbird.relay.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "netbird.relay.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "netbird.relay.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: relay
+          image: "{{ .Values.relay.image.repository }}:{{ .Values.relay.image.tag | default .Chart.AppVersion | trimPrefix "v" }}"
+          imagePullPolicy: {{ .Values.relay.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 33080
+            - name: metrics
+              containerPort: 9090
+          env:
+            - name: NB_LOG_LEVEL
+              value: info
+            - name: NB_LISTEN_ADDRESS
+              value: ":33080"
+            - name: NB_EXPOSED_ADDRESS
+              value: {{ printf "rels://%s:443" .Values.route.serverHostname | quote }}
+            - name: NB_AUTH_SECRET
+              value: {{ .Values.relay.authSecret | quote }}
+          resources: {}

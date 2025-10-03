@@ -1,0 +1,87 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "netbird.management.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "netbird.management.labels" . | nindent 4 }}
+data:
+  management.json: |
+    {
+      "Relay": {
+        "Addresses": [
+          "rels://{{ .Values.route.serverHostname }}:443/relay"
+        ],
+        "CredentialsTTL": "24h",
+        "Secret": "{{ .Values.relay.authSecret }}"
+      },
+      "Signal": {
+        "Proto": "https",
+        "URI": "{{ .Values.route.serverHostname }}:443",
+        "Username": "",
+        "Password": null
+      },
+      "DisableDefaultPolicy": false,
+      "Datadir": "",
+      "DataStoreEncryptionKey": "{{ .Values.management.database.encryptionKey }}",
+      "StoreConfig": {
+        "Engine": "{{ .Values.management.database.engine }}"
+      },
+      "HttpConfig": {
+        "Address": "0.0.0.0:80",
+        "AuthAudience": "{{ .Values.oidc.clientID }}",
+        "AuthUserIDClaim": "email",
+        "IdpSignKeyRefreshEnabled": false,
+        "OIDCConfigEndpoint": "{{ tpl .Values.oidc.configEndpoint . }}",
+        "AuthIssuer": "{{ .Values.oidc.issuer }}",
+        "AuthKeysLocation": "{{ .Values.oidc.jwksURI }}"
+      },
+      {{- if ne .Values.oidc.idpManager.type "none" }}
+      "IdpManagerConfig": {
+        "ManagerType": "{{ .Values.oidc.idpManager.type }}",
+        "ClientConfig": {
+          "Issuer": "{{ .Values.oidc.issuer }}",
+          "TokenEndpoint": "{{ .Values.oidc.tokenEndpoint }}",
+          "ClientID": "{{ .Values.oidc.clientID }}",
+          "ClientSecret": "{{ .Values.oidc.clientSecret }}",
+          "GrantType": "client_credentials"
+        },
+        "ExtraConfig": {{ toJson .Values.oidc.idpManager.extraConfig }},
+        "Auth0ClientCredentials": null,
+        "AzureClientCredentials": null,
+        "KeycloakClientCredentials": null,
+        "ZitadelClientCredentials": null
+      },
+      {{- end }}
+      {{- if eq .Values.oidc.deviceProvider "hosted" }}
+      "DeviceAuthorizationFlow": {
+        "Provider": "hosted",
+        "ProviderConfig": {
+          "ClientID": "{{ .Values.oidc.clientID }}",
+          "ClientSecret": "{{ .Values.oidc.clientSecret }}",
+          "Audience": "{{ .Values.oidc.clientID }}",
+          "TokenEndpoint": "{{ .Values.oidc.tokenEndpoint }}",
+          "DeviceAuthEndpoint": "{{ .Values.oidc.deviceAuthEndpoint }}",
+          "Scope": "openid",
+          "UseIDToken": false
+        }
+      },
+      {{- end }}
+      "PKCEAuthorizationFlow": {
+        "ProviderConfig": {
+          "ClientID": "{{ .Values.oidc.clientID }}",
+          "ClientSecret": "{{ .Values.oidc.clientSecret }}",
+          "Audience": "{{ .Values.oidc.clientID }}",
+          "TokenEndpoint": "{{ .Values.oidc.tokenEndpoint }}",
+          "AuthorizationEndpoint": "{{ .Values.oidc.authEndpoint }}",
+          "Scope": "{{ .Values.oidc.scopes }}",
+          "RedirectURLs": [
+            "http://localhost:53000"
+          ],
+          "UseIDToken": false,
+          "DisablePromptLogin": false,
+          "LoginFlag": 0
+        }
+      }
+    }

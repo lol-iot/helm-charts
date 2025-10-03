@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "netbird.management.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "netbird.management.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "netbird.management.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "netbird.management.labels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print .Template.BasePath "/management/configmap.helm.yaml") . | sha256sum }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: management
+          image: "{{ .Values.management.image.repository }}:{{ .Values.management.image.tag | default .Chart.AppVersion | trimPrefix "v" }}"
+          imagePullPolicy: {{ .Values.management.image.pullPolicy }}
+          args:
+            - --port
+            - "80"
+            - --datadir
+            - /var/lib/netbird
+            - --log-file
+            - console
+            - --log-level
+            - info
+            - --single-account-mode-domain
+            - {{ .Values.management.domain }}
+            - --dns-domain
+            - netbird.local
+          ports:
+            - name: http
+              containerPort: 80
+            - name: grpc
+              containerPort: 33073
+            - name: metrics
+              containerPort: 9090
+          env:
+            {{- if eq .Values.management.database.engine "postgres" }}
+            - name: NETBIRD_STORE_ENGINE_POSTGRES_DSN
+              value: "host={{ .Values.management.database.host }} port={{ .Values.management.database.port }} user={{ .Values.management.database.user }} password={{ .Values.management.database.password }} dbname={{ .Values.management.database.database }}"
+            {{- end }}
+          resources: {}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/netbird
+            - name: data
+              mountPath: /var/lib/netbird
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "netbird.management.fullname" . }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "netbird.management.fullname" . }}
