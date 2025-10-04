@@ -11,3 +11,7 @@ run = "helm-docs --chart-search-root=./src"
 [tasks.helm-schema]
 description = "Generate Helm chart schema"
 run = "helm-schema --chart-search-root=./src"
+
+[tasks.index]
+description = "Generate Helm chart index"
+run = "helm repo index ."
