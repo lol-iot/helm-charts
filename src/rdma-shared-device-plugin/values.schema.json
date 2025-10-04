@@ -1,0 +1,389 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "cdi": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "Enable CDI support.\nhttps://github.com/cncf-tags/container-device-interface",
+          "required": [],
+          "title": "enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "enabled"
+      ],
+      "title": "cdi",
+      "type": "object"
+    },
+    "commonLabels": {
+      "additionalProperties": false,
+      "description": "Common labels for all resources.",
+      "required": [],
+      "title": "commonLabels",
+      "type": "object"
+    },
+    "config": {
+      "additionalProperties": false,
+      "description": "Plugin Configurations.\nhttps://github.com/Mellanox/k8s-rdma-shared-dev-plugin?tab=readme-ov-file#rdma-shared-device-plugin-configurations",
+      "properties": {
+        "configList": {
+          "description": "List of device configurations.",
+          "items": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "devices": {
+                    "description": "List of devices names to be selected, same as \"ifNames\" selector",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "required": [],
+                          "type": "string"
+                        },
+                        {
+                          "required": [],
+                          "type": "string"
+                        }
+                      ],
+                      "required": []
+                    },
+                    "required": [],
+                    "title": "devices",
+                    "type": "array"
+                  },
+                  "rdmaHcaMax": {
+                    "default": 1000,
+                    "description": "Maximum number of RDMA resources that can be provided by the device\nplugin resource.",
+                    "required": [],
+                    "title": "rdmaHcaMax",
+                    "type": "integer"
+                  },
+                  "resourceName": {
+                    "default": "hca_a",
+                    "description": "Endpoint resource name. Should not contain special characters, must\nbe unique in the scope of the resource prefix.",
+                    "required": [],
+                    "title": "resourceName",
+                    "type": "string"
+                  },
+                  "resourcePrefix": {
+                    "default": "mellanox",
+                    "description": "Endpoint resource prefix. Should not contain special characters.",
+                    "required": [],
+                    "title": "resourcePrefix",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "resourcePrefix",
+                  "resourceName",
+                  "rdmaHcaMax",
+                  "devices"
+                ],
+                "type": "object"
+              },
+              {
+                "additionalProperties": false,
+                "properties": {
+                  "rdmaHcaMax": {
+                    "default": 500,
+                    "required": [],
+                    "title": "rdmaHcaMax",
+                    "type": "integer"
+                  },
+                  "resourceName": {
+                    "default": "hca_b",
+                    "required": [],
+                    "title": "resourceName",
+                    "type": "string"
+                  },
+                  "resourcePrefix": {
+                    "default": "mellanox",
+                    "required": [],
+                    "title": "resourcePrefix",
+                    "type": "string"
+                  },
+                  "selectors": {
+                    "additionalProperties": false,
+                    "description": "Map of device selectors for filtering the devices.",
+                    "properties": {
+                      "deviceIDs": {
+                        "description": "(string) Target device's device Hex code.",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "required": [],
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "deviceIDs",
+                        "type": "array"
+                      },
+                      "drivers": {
+                        "description": "Target device driver names.",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "required": [],
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "drivers",
+                        "type": "array"
+                      },
+                      "ifNames": {
+                        "description": "Target device name.",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "required": [],
+                              "type": "string"
+                            },
+                            {
+                              "required": [],
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "ifNames",
+                        "type": "array"
+                      },
+                      "linkTypes": {
+                        "description": "Link type of the net device associated with the PCI device.",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "required": [],
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "linkTypes",
+                        "type": "array"
+                      },
+                      "vendors": {
+                        "description": "(string) Target device's vendor Hex code.",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "required": [],
+                              "type": "string"
+                            }
+                          ],
+                          "required": []
+                        },
+                        "required": [],
+                        "title": "vendors",
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "vendors",
+                      "deviceIDs",
+                      "drivers",
+                      "ifNames",
+                      "linkTypes"
+                    ],
+                    "title": "selectors",
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "resourcePrefix",
+                  "resourceName",
+                  "rdmaHcaMax",
+                  "selectors"
+                ],
+                "type": "object"
+              }
+            ],
+            "required": []
+          },
+          "required": [],
+          "title": "configList",
+          "type": "array"
+        },
+        "periodicUpdateInterval": {
+          "default": 300,
+          "description": "Time interval in seconds to update the resources according to host\ndevices in case of changes. If set to 0, the resources will not be updated.\nIf not set, the default value is 60.",
+          "required": [],
+          "title": "periodicUpdateInterval",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "periodicUpdateInterval",
+        "configList"
+      ],
+      "title": "config",
+      "type": "object"
+    },
+    "fullnameOverride": {
+      "default": "",
+      "description": "String to fully override release name.",
+      "required": [],
+      "title": "fullnameOverride",
+      "type": "string"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "image": {
+      "additionalProperties": false,
+      "properties": {
+        "pullPolicy": {
+          "default": "IfNotPresent",
+          "description": "Image pull policy.",
+          "required": [],
+          "title": "pullPolicy",
+          "type": "string"
+        },
+        "repository": {
+          "default": "ghcr.io/mellanox/k8s-rdma-shared-dev-plugin",
+          "description": "Image repository.",
+          "required": [],
+          "title": "repository",
+          "type": "string"
+        },
+        "tag": {
+          "default": "",
+          "description": "Image tag. If not set, the chart's appVersion will be used.",
+          "required": [],
+          "title": "tag",
+          "type": "string"
+        }
+      },
+      "required": [
+        "repository",
+        "tag",
+        "pullPolicy"
+      ],
+      "title": "image",
+      "type": "object"
+    },
+    "imagePullSecrets": {
+      "description": "Image pull secrets.",
+      "items": {
+        "required": []
+      },
+      "required": [],
+      "title": "imagePullSecrets",
+      "type": "array"
+    },
+    "nameOverride": {
+      "default": "",
+      "description": "String to partially override release name.",
+      "required": [],
+      "title": "nameOverride",
+      "type": "string"
+    },
+    "podLabels": {
+      "additionalProperties": false,
+      "description": "Extra labels for pods.",
+      "required": [],
+      "title": "podLabels",
+      "type": "object"
+    },
+    "resources": {
+      "additionalProperties": false,
+      "description": "Pod resource requests and limits for containers.",
+      "required": [],
+      "title": "resources",
+      "type": "object"
+    },
+    "serviceAccount": {
+      "additionalProperties": false,
+      "properties": {
+        "create": {
+          "default": true,
+          "required": [],
+          "title": "create",
+          "type": "boolean"
+        },
+        "name": {
+          "default": "",
+          "required": [],
+          "title": "name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "create",
+        "name"
+      ],
+      "title": "serviceAccount",
+      "type": "object"
+    },
+    "tolerations": {
+      "description": "List of node taints to tolerate for pods.",
+      "items": {
+        "anyOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "effect": {
+                "default": "NoSchedule",
+                "required": [],
+                "title": "effect",
+                "type": "string"
+              },
+              "key": {
+                "default": "amd.com/gpu",
+                "required": [],
+                "title": "key",
+                "type": "string"
+              },
+              "operator": {
+                "default": "Exists",
+                "required": [],
+                "title": "operator",
+                "type": "string"
+              }
+            },
+            "required": [
+              "key",
+              "operator",
+              "effect"
+            ],
+            "type": "object"
+          }
+        ],
+        "required": []
+      },
+      "required": [],
+      "title": "tolerations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "nameOverride",
+    "fullnameOverride",
+    "commonLabels",
+    "imagePullSecrets",
+    "image",
+    "serviceAccount",
+    "podLabels",
+    "resources",
+    "tolerations",
+    "cdi",
+    "config"
+  ],
+  "type": "object"
+}

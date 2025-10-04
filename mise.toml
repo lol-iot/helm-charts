@@ -1,3 +1,13 @@
 [tools]
+go = "1.24.2"
 "go:github.com/dadav/helm-schema/cmd/helm-schema" = "0.18.1"
+helm = "3.18.6"
 helm-docs = "1.14.2"
+
+[tasks.helm-docs]
+description = "Generate Helm chart documentation"
+run = "helm-docs --chart-search-root=./src"
+
+[tasks.helm-schema]
+description = "Generate Helm chart schema"
+run = "helm-schema --chart-search-root=./src"
